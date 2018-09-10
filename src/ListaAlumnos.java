@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -25,7 +26,10 @@ public class ListaAlumnos extends javax.swing.JFrame {
     public ListaAlumnos() {
         initComponents();
         setLocationRelativeTo(null);
+        btnBuscar.doClick(1);
     }
+
+    FrameAlumnos fAlumnos = new FrameAlumnos();
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -37,35 +41,36 @@ public class ListaAlumnos extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblAlumnos = new javax.swing.JTable();
+        tblRegistros = new javax.swing.JTable();
         btnBuscar = new javax.swing.JToggleButton();
         cboxFiltro = new javax.swing.JComboBox<>();
         txtFiltro = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        btnEliminar = new javax.swing.JToggleButton();
-        btnMod = new javax.swing.JToggleButton();
-        jButton1 = new javax.swing.JButton();
+        btnEliminarRegistro = new javax.swing.JToggleButton();
+        btnNuevoRegistro = new javax.swing.JButton();
+        btnRefrescarLista = new javax.swing.JToggleButton();
 
-        tblAlumnos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "ID", "Nombres", "Apellidos", "Nombre Tutor", "Apellido Tutor", "Clic en \"Buscar\"", "Title 7", "Title 8", "Title 9"
+        setTitle("Lista de Alumnos");
+
+        tblRegistros = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+        };
+        tblRegistros.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        tblRegistros.setColumnSelectionAllowed(false);
+        tblRegistros.getTableHeader().setReorderingAllowed(false);
+        tblRegistros.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblRegistrosMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblAlumnos);
+        tblRegistros.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                tblRegistrosPropertyChange(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblRegistros);
 
         btnBuscar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-find-user-male-50.png"))); // NOI18N
@@ -77,7 +82,7 @@ public class ListaAlumnos extends javax.swing.JFrame {
         });
 
         cboxFiltro.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        cboxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Nombre", "Apellido", "Materia", "Fecha", " " }));
+        cboxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Nombre", "Apellido Paterno", "Apellido Materno", "Materia", "Fecha", " " }));
         cboxFiltro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboxFiltroActionPerformed(evt);
@@ -87,25 +92,30 @@ public class ListaAlumnos extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Filtro:");
 
-        btnEliminar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-trash-50.png"))); // NOI18N
-        btnEliminar.setText("Eliminar");
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminarRegistro.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnEliminarRegistro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-trash-50.png"))); // NOI18N
+        btnEliminarRegistro.setText("Eliminar");
+        btnEliminarRegistro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
+                btnEliminarRegistroActionPerformed(evt);
             }
         });
 
-        btnMod.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnMod.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-new-contact-50.png"))); // NOI18N
-        btnMod.setText("Modifcar");
-
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-add-new-50.png"))); // NOI18N
-        jButton1.setText("Nuevo");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnNuevoRegistro.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnNuevoRegistro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-add-new-50.png"))); // NOI18N
+        btnNuevoRegistro.setText("Nuevo");
+        btnNuevoRegistro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnNuevoRegistroActionPerformed(evt);
+            }
+        });
+
+        btnRefrescarLista.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnRefrescarLista.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-synchronize-50.png"))); // NOI18N
+        btnRefrescarLista.setText("Refrescar");
+        btnRefrescarLista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefrescarListaActionPerformed(evt);
             }
         });
 
@@ -118,22 +128,21 @@ public class ListaAlumnos extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 890, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
+                        .addComponent(jLabel1)
+                        .addGap(0, 850, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtFiltro, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(txtFiltro, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnBuscar)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(cboxFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnMod)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnEliminar)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(btnBuscar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cboxFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnNuevoRegistro)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRefrescarLista)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEliminarRegistro)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -146,15 +155,19 @@ public class ListaAlumnos extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cboxFiltro)
-                            .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cboxFiltro)
+                                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addComponent(btnRefrescarLista, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnMod)
-                        .addComponent(btnEliminar)))
+                        .addComponent(btnNuevoRegistro)
+                        .addComponent(btnEliminarRegistro)))
                 .addContainerGap())
         );
 
@@ -163,7 +176,7 @@ public class ListaAlumnos extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         ListaA lista = new ListaA();
-        lista.Buscar(txtFiltro.getText(), cboxFiltro.getSelectedItem().toString(), tblAlumnos);
+        lista.Buscar(txtFiltro.getText(), cboxFiltro.getSelectedItem().toString(), tblRegistros);
 
 
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -171,12 +184,12 @@ public class ListaAlumnos extends javax.swing.JFrame {
     private void cboxFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboxFiltroActionPerformed
     }//GEN-LAST:event_cboxFiltroActionPerformed
 
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+    private void btnEliminarRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarRegistroActionPerformed
         int dialog = JOptionPane.showConfirmDialog(null, "¿Seguro que desea eliminar el registro?", "Eliminar registro", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
         if (dialog == JOptionPane.YES_OPTION) {
             try {
-                int row = tblAlumnos.getSelectedRow();
-                DefaultTableModel model = (DefaultTableModel) tblAlumnos.getModel();
+                int row = tblRegistros.getSelectedRow();
+                DefaultTableModel model = (DefaultTableModel) tblRegistros.getModel();
                 String selected = model.getValueAt(row, 0).toString();
 
                 if (row >= 0) {
@@ -197,18 +210,93 @@ public class ListaAlumnos extends javax.swing.JFrame {
         }
 
 
-    }//GEN-LAST:event_btnEliminarActionPerformed
+    }//GEN-LAST:event_btnEliminarRegistroActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnNuevoRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoRegistroActionPerformed
+
         FrameAlumnos nuevo = new FrameAlumnos();
         nuevo.setVisible(true);
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnNuevoRegistroActionPerformed
+
+    private void tblRegistrosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRegistrosMouseClicked
+
+        if (evt.getClickCount() == 2) {
+            try {
+
+                int index = tblRegistros.getSelectedRow();
+                TableModel model = tblRegistros.getModel();
+
+                //Declaración de las variables según la tabla
+                String ID = model.getValueAt(index, 0).toString();
+                String Nombres = model.getValueAt(index, 1).toString();
+                String ApellidoP = model.getValueAt(index, 2).toString();
+                String ApellidoM = model.getValueAt(index, 3).toString();
+                String NombreTut = model.getValueAt(index, 4).toString();
+                String ApellidoPTut = model.getValueAt(index, 5).toString();
+                String ApellidoMTut = model.getValueAt(index, 6).toString();
+                String Nombretut2 = model.getValueAt(index, 7).toString();
+                String ApellidoPTut2 = model.getValueAt(index, 8).toString();
+                String ApellidoMTut2 = model.getValueAt(index, 9).toString();
+                String Direccion = model.getValueAt(index, 10).toString();
+                String Colonia = model.getValueAt(index, 11).toString();
+                String Telefono = model.getValueAt(index, 12).toString();
+                String Celular = model.getValueAt(index, 13).toString();
+                String Correo = model.getValueAt(index, 14).toString();
+                String Escuela = model.getValueAt(index, 15).toString();
+                String Grado = model.getValueAt(index, 16).toString();
+                String Turno = model.getValueAt(index, 17).toString();
+                String Materia = model.getValueAt(index, 18).toString();
+                String Comentarios = model.getValueAt(index, 19).toString();
+                String Fecha = model.getValueAt(index, 20).toString();
+
+                fAlumnos.setVisible(true);
+                fAlumnos.pack();
+
+                //Acomodo de las variables en la frame de registro de alumnos
+                fAlumnos.txtID.setText(ID);
+                fAlumnos.txtNalumno.setText(Nombres);
+                fAlumnos.txtAPalumno.setText(ApellidoP);
+                fAlumnos.txtAMalumno.setText(ApellidoM);
+                fAlumnos.txtNtutor.setText(NombreTut);
+                fAlumnos.txtAPtut.setText(ApellidoPTut);
+                fAlumnos.txtAMtut.setText(ApellidoMTut);
+                fAlumnos.txtNtutor2.setText(Nombretut2);
+                fAlumnos.txtAPtut2.setText(ApellidoPTut2);
+                fAlumnos.txtAMtut2.setText(ApellidoMTut2);
+                fAlumnos.txtDireccion.setText(Direccion);
+                fAlumnos.txtColonia.setText(Colonia);
+                fAlumnos.txtTelefono.setText(Telefono);
+                fAlumnos.txtCelular.setText(Celular);
+                fAlumnos.txtCorreo.setText(Correo);
+                fAlumnos.txtEscuela.setText(Escuela);
+                fAlumnos.cboxGrado.setSelectedItem(Grado);
+                fAlumnos.cboxTurno.setSelectedItem(Turno);
+                fAlumnos.cboxMateria.setSelectedItem(Materia);
+                fAlumnos.txtComentarios.setText(Comentarios);
+                fAlumnos.Calendario.setDateFormatString(Fecha);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }//GEN-LAST:event_tblRegistrosMouseClicked
+
+    private void tblRegistrosPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_tblRegistrosPropertyChange
+
+    }//GEN-LAST:event_tblRegistrosPropertyChange
+
+    private void btnRefrescarListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefrescarListaActionPerformed
+        ListaA lista = new ListaA();
+        lista.Buscar(txtFiltro.getText(), cboxFiltro.getSelectedItem().toString(), tblRegistros);
+
+    }//GEN-LAST:event_btnRefrescarListaActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -242,13 +330,13 @@ public class ListaAlumnos extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btnBuscar;
-    private javax.swing.JToggleButton btnEliminar;
-    private javax.swing.JToggleButton btnMod;
+    private javax.swing.JToggleButton btnEliminarRegistro;
+    private javax.swing.JButton btnNuevoRegistro;
+    private javax.swing.JToggleButton btnRefrescarLista;
     private javax.swing.JComboBox<String> cboxFiltro;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblAlumnos;
+    public javax.swing.JTable tblRegistros;
     private javax.swing.JTextField txtFiltro;
     // End of variables declaration//GEN-END:variables
 }

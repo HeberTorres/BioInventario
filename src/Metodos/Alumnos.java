@@ -20,9 +20,14 @@ public class Alumnos {
 
     public int Registro(
             String nombres,
-            String apellidos,
+            String apellidoP,
+            String apellidoM,
             String nombretut,
-            String apellidostut,
+            String apellidoPtut,
+            String apellioMtut,
+            String nombretut2,
+            String apellidoPtut2,
+            String apellidoMtut2,
             String direccion,
             String colonia,
             String telefono,
@@ -36,8 +41,48 @@ public class Alumnos {
             String fecha) {
         int resultado = 0;
         Connection con = null;
-        String SSQL = "INSERT INTO alumnos (nombres, apellidos, nombretut, apellidostut, direccion, colonia, telefono, celular, correo, escuela, grado, turno, materia, comentarios, fecha) " //Aqui se agingan los comandos SQL para la tabla
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; 
+        String SSQL = "INSERT INTO alumnos ("
+                + "nombres,"
+                + "apellidop,"
+                + "apellidom,"
+                + "nombretut,"
+                + "apellidoPtut,"
+                + "apellidoMtut,"
+                + "nombretut2,"
+                + "apellidoPtut2,"
+                + "apellidoMtut2,"
+                + "direccion,"
+                + "colonia,"
+                + "telefono,"
+                + "celular,"
+                + "correo,"
+                + "escuela,"
+                + "grado,"
+                + "turno,"
+                + "materia,"
+                + "comentarios,"
+                + "fecha) " //Aqui se agingan los comandos SQL para la tabla
+                + "VALUES ("
+                + "?,"
+                + " ?,"
+                + " ?,"
+                + " ?,"
+                + " ?,"
+                + " ?,"
+                + " ?,"
+                + " ?,"
+                + " ?,"
+                + " ?,"
+                + " ?,"
+                + " ?,"
+                + " ?,"
+                + " ?,"
+                + " ?,"
+                + " ?,"
+                + " ?,"
+                + " ?,"
+                + " ?,"
+                + " ?)";
 
         try {
             //este metodo es que va almacenar los registros de la frame de cuentas, se debe de asignar cada una de las variables, tanto aqui.
@@ -48,21 +93,26 @@ public class Alumnos {
             try (PreparedStatement psql = con.prepareStatement(SSQL) //Agregar elementos tanto aqui como en la base de datos
                     ) {
                 psql.setString(1, nombres);
-                psql.setString(2, apellidos);
-                psql.setString(3, nombretut);
-                psql.setString(4, apellidostut);
-                psql.setString(5, direccion);
-                psql.setString(6, colonia);
-                psql.setString(7, telefono);
-                psql.setString(8, celular);
-                psql.setString(9, correo);
-                psql.setString(10, escuela);
-                psql.setString(11, grado);
-                psql.setString(12, turno);
-                psql.setString(13, materia);
-                psql.setString(14, comentarios);
-                psql.setString(15, fecha);
-
+                psql.setString(2, apellidoP);
+                psql.setString(3, apellidoM);
+                psql.setString(4, nombretut);
+                psql.setString(5, apellidoPtut);
+                psql.setString(6, apellioMtut);
+                psql.setString(7, nombretut2);
+                psql.setString(8, apellidoPtut2);
+                psql.setString(9, apellidoMtut2);
+                psql.setString(10, direccion);
+                psql.setString(11, colonia);
+                psql.setString(12, telefono);
+                psql.setString(13, celular);
+                psql.setString(14, correo);
+                psql.setString(15, escuela);
+                psql.setString(16, grado);
+                psql.setString(17, turno);
+                psql.setString(18, materia);
+                psql.setString(19, comentarios);
+                psql.setString(20, fecha);
+                
                 resultado = psql.executeUpdate();
             }
 

@@ -13,12 +13,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 //Filtro y busqueda
+
 /**
  *
- * @author Heber
+ * @author Heber J. Torres
  */
 public class Filtro {
-     Pool metodospool = new Pool();
+
+    Pool metodospool = new Pool();
     DefaultTableModel ModeloTabla;
 
     public void Buscar(String valor, String filtro, JTable tablacontactos) {
@@ -53,7 +55,7 @@ public class Filtro {
                 SSQL = "SELECT idCuentas, nombres, apellidos, materia, horas, costo, pago, adeudo, fecha "
                         + "FROM cuenta WHERE fecha LIKE '%" + valor + "%'";
                 break;
-                
+
         }
 
         try {
@@ -102,5 +104,5 @@ public class Filtro {
 
         }
     }
-    
+
 }

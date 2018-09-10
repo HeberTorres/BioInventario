@@ -33,12 +33,14 @@ public class FramePrincipal extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
         btnListaAlumnos = new javax.swing.JButton();
         btnRegistroAlumnos = new javax.swing.JButton();
+        btnListaAlumnos1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Menú");
 
         btnCuentas.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnCuentas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-cashbook-50.png"))); // NOI18N
-        btnCuentas.setText("Cuentas");
+        btnCuentas.setText("CUENTAS");
         btnCuentas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCuentasActionPerformed(evt);
@@ -55,8 +57,8 @@ public class FramePrincipal extends javax.swing.JFrame {
         });
 
         btnListaAlumnos.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnListaAlumnos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-doge-50.png"))); // NOI18N
-        btnListaAlumnos.setText("Lista");
+        btnListaAlumnos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-contact-50.png"))); // NOI18N
+        btnListaAlumnos.setText("ALUMNOS");
         btnListaAlumnos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnListaAlumnosActionPerformed(evt);
@@ -64,11 +66,20 @@ public class FramePrincipal extends javax.swing.JFrame {
         });
 
         btnRegistroAlumnos.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnRegistroAlumnos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-doge-50.png"))); // NOI18N
-        btnRegistroAlumnos.setText("Alumnos");
+        btnRegistroAlumnos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-new-contact-50.png"))); // NOI18N
+        btnRegistroAlumnos.setText("REGISTRO");
         btnRegistroAlumnos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegistroAlumnosActionPerformed(evt);
+            }
+        });
+
+        btnListaAlumnos1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnListaAlumnos1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8-guardian-50.png"))); // NOI18N
+        btnListaAlumnos1.setText("TUTORES");
+        btnListaAlumnos1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListaAlumnos1ActionPerformed(evt);
             }
         });
 
@@ -78,13 +89,15 @@ public class FramePrincipal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnCuentas, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRegistroAlumnos)
-                    .addComponent(btnListaAlumnos, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnRegistroAlumnos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCuentas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnListaAlumnos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(257, 257, 257))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(btnListaAlumnos1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(120, 120, 120)
                 .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -97,9 +110,15 @@ public class FramePrincipal extends javax.swing.JFrame {
                 .addComponent(btnRegistroAlumnos, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnListaAlumnos, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
-                .addComponent(btnSalir)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                        .addComponent(btnSalir)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnListaAlumnos1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
@@ -132,6 +151,10 @@ lista.setVisible(true);
 FrameAlumnos falumnos = new FrameAlumnos();
 falumnos.setVisible(true);
     }//GEN-LAST:event_btnRegistroAlumnosActionPerformed
+
+    private void btnListaAlumnos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaAlumnos1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnListaAlumnos1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -172,6 +195,7 @@ falumnos.setVisible(true);
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCuentas;
     private javax.swing.JButton btnListaAlumnos;
+    private javax.swing.JButton btnListaAlumnos1;
     private javax.swing.JButton btnRegistroAlumnos;
     private javax.swing.JButton btnSalir;
     // End of variables declaration//GEN-END:variables
