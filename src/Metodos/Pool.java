@@ -15,7 +15,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 public final class Pool {
 
     public DataSource dataSource;
-    public String db = "mydb";
+    public String db = "controlbiomedica";
     public String url = "jdbc:mysql://localhost/" + db;
     public String user = "root";
     public String pass = "root";
